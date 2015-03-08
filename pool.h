@@ -1,6 +1,6 @@
 #pragma once
 
-#define POOL_BLOCKS  1024
+#define POOL_BLOCKS_INITIAL 1
 
 typedef struct poolFreed{
 	struct poolFreed *nextFree;
@@ -12,7 +12,8 @@ typedef struct {
 	unsigned int used;
 	int block;
 	poolFreed *freed;
-	char *blocks[POOL_BLOCKS];
+	unsigned int blocksUsed;
+	char **blocks;
 } pool;
 
 void poolInitialize(pool *p, unsigned int elementSize, unsigned int blockSize);

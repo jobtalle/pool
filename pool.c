@@ -16,7 +16,10 @@ void poolInitialize(pool *p, unsigned int elementSize, unsigned int blockSize)
 	p->used = blockSize - 1;
 	p->block = -1;
 
-	for(i = 0; i < POOL_BLOCKS; i++)
+	p->blocksUsed = POOL_BLOCKS_INITIAL;
+	p->blocks = malloc(sizeof(char*)* p->blocksUsed);
+
+	for(i = 0; i < p->blocksUsed; i++)
 		p->blocks[i] = NULL;
 	
 	p->freed = NULL;
@@ -25,7 +28,7 @@ void poolInitialize(pool *p, unsigned int elementSize, unsigned int blockSize)
 void poolFreePool(pool *p)
 {
 	unsigned int i;
-	for(i = 0; i < POOL_BLOCKS; i++) {
+	for(i = 0; i < p->blocksUsed; i++) {
 		if(p->blocks[i] == NULL) {
 			break;
 		}
@@ -33,6 +36,8 @@ void poolFreePool(pool *p)
 			free(p->blocks[i]);
 		}
 	}
+
+	free(p->blocks);
 }
 
 void *poolMalloc(pool *p)
@@ -47,6 +52,17 @@ void *poolMalloc(pool *p)
 	if(p->used == p->blockSize) {
 		p->used = 0;
 		p->block++;
+		if(p->block == p->blocksUsed) {
+			unsigned int i;
+
+			p->blocksUsed <<= 1;
+			p->blocks = realloc(p->blocks, sizeof(char*)* p->blocksUsed);
+
+			for(i = p->blocksUsed >> 1; i < p->blocksUsed; i++) {
+				p->blocks[i] = NULL;
+			}
+		}
+
 		if(p->blocks[p->block] == NULL) {
 			p->blocks[p->block] = malloc(p->elementSize * p->blockSize);
 		}
