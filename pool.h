@@ -22,6 +22,3 @@ void poolFreePool(pool *p);
 void *poolMalloc(pool *p);
 void poolFree(pool *p, void *ptr);
 void poolFreeAll(pool *p);
-
-bool poolIsFreed(pool *p, void *ptr);
-void *poolGetNext(pool *p, void *ptr);
