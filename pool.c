@@ -82,3 +82,50 @@ void poolFreeAll(pool *p)
 	p->block = -1;
 	p->freed = NULL;
 }
+
+bool poolIsFreed(pool *p, void *ptr)
+{
+	if(ptr == NULL){
+		return true;
+	}else if(p->freed == NULL){
+		return false;
+	}
+
+	poolFreed *freed = p->freed;
+	while(freed->nextFree != NULL){
+		freed = freed->nextFree;
+		if(freed == ptr){
+			return true;
+		}
+	}
+	return false;
+}
+
+void *poolGetNext(pool *p, void *ptr)
+{
+	unsigned int i, j;
+	for(i = 0; i <= p->block; i++){
+		for(j = 0; j < p->blockSize; j += p->elementSize){
+			if(p->blocks[i] + j == ptr){
+				goto found;
+			}
+		}
+	}
+	return NULL;
+found: ;
+			 void *next = NULL;
+			 do{
+				 if(!poolIsFreed(p, next)){
+					 return next;
+				 }
+				 if((j += p->elementSize) == p->blockSize){
+					 j = 0;
+					 i++;
+					 if(i == p->block){
+						 return NULL;
+					 }
+				 }
+				 next = p->blocks[i] + j;
+			 } while(next != NULL && i * p->blockSize + j < p->block * p->blockSize + (p->used + 1) * p->elementSize);
+			 return NULL;
+}
