@@ -4,7 +4,7 @@
 #include "pool.h"
 
 #ifndef max
-#define max(a,b) (a<b?b:a)
+#define max(a,b) ((a)<(b)?(b):(a))
 #endif
 
 void poolInitialize(pool *p, unsigned int elementSize, unsigned int blockSize)
@@ -13,16 +13,13 @@ void poolInitialize(pool *p, unsigned int elementSize, unsigned int blockSize)
 
 	p->elementSize = max(elementSize, sizeof(poolFreed));
 	p->blockSize = blockSize;
-	p->used = blockSize - 1;
-	p->block = -1;
+	
+	poolFreeAll(p);
 
 	p->blocksUsed = POOL_BLOCKS_INITIAL;
 	p->blocks = malloc(sizeof(char*)* p->blocksUsed);
 
-	for(i = 0; i < p->blocksUsed; ++i)
-		p->blocks[i] = NULL;
-	
-	p->freed = NULL;
+	for(i = 0; i < p->blocksUsed; ++i) p->blocks[i] = NULL;
 }
 
 void poolFreePool(pool *p)
