@@ -16,7 +16,7 @@ typedef struct {
 	char **blocks;
 } pool;
 
-void poolInitialize(pool *p, unsigned int elementSize, unsigned int blockSize);
+void  *poolInitialize(pool *p, unsigned int elementSize, unsigned int blockSize);
 void poolFreePool(pool *p);
 
 void *poolMalloc(pool *p);

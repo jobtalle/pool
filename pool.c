@@ -7,10 +7,12 @@
 #define max(a,b) ((a)<(b)?(b):(a))
 #endif
 
-void poolInitialize(pool *p, unsigned int elementSize, unsigned int blockSize)
+void* poolInitialize(pool *p, unsigned int elementSize, unsigned int blockSize)
 {
 	unsigned int i;
 
+	p = malloc(sizeof(pool));
+		
 	p->elementSize = max(elementSize, sizeof(poolFreed));
 	p->blockSize = blockSize;
 	
@@ -20,6 +22,8 @@ void poolInitialize(pool *p, unsigned int elementSize, unsigned int blockSize)
 	p->blocks = malloc(sizeof(char*)* p->blocksUsed);
 
 	for(i = 0; i < p->blocksUsed; ++i) p->blocks[i] = NULL;
+	
+	return p;
 }
 
 void poolFreePool(pool *p)
