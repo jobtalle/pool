@@ -1,3 +1,4 @@
 # pool
 A generic C memory pool.
-Please refer test.c file for how to use generic memory pool.
+
+Please refer to test.c file for an example.
