@@ -13,10 +13,10 @@ int  test_pool(int element_size, int block_size)
 	int *test_ptr1 = NULL;
 	int *test_ptr2 = NULL;
 	
-	/*init mem pool of given args */
+	/* init mem pool of given args */
 	poolInitialize(&pool_ptr,element_size, block_size);
 	
-	/*allocate memory from memory pool */
+	/* allocate memory from memory pool */
 	test_ptr1 = poolMalloc(&pool_ptr);
 	test_ptr2 = poolMalloc(&pool_ptr);
 	
@@ -26,7 +26,7 @@ int  test_pool(int element_size, int block_size)
 		return FAILURE;
 	}
 	
-	/*free memory allocated from memory pool */
+	/* free memory allocated from memory pool */
 	 poolFree(&pool_ptr, test_ptr1);
 	
 	/* free all memory used from this pool */
