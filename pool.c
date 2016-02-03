@@ -1,6 +1,5 @@
 #include <string.h>
 #include <stdlib.h>
-#include <stdint.h>
 
 #include "pool.h"
 
@@ -18,7 +17,7 @@ void poolInitialize(pool *p, uint32_t elementSize, uint32_t blockSize)
 	poolFreeAll(p);
 
 	p->blocksUsed = POOL_BLOCKS_INITIAL;
-	p->blocks = malloc(sizeof(char*)* p->blocksUsed);
+	p->blocks = malloc(sizeof(uint8_t*)* p->blocksUsed);
 
 	for(i = 0; i < p->blocksUsed; ++i) p->blocks[i] = NULL;
 }
@@ -52,7 +51,7 @@ void *poolMalloc(pool *p)
 			uint32_t i;
 
 			p->blocksUsed <<= 1;
-			p->blocks = realloc(p->blocks, sizeof(char*)* p->blocksUsed);
+			p->blocks = realloc(p->blocks, sizeof(uint8_t*)* p->blocksUsed);
 
 			for(i = p->blocksUsed >> 1; i < p->blocksUsed; ++i) {
 				p->blocks[i] = NULL;
