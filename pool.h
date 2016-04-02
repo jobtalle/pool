@@ -7,18 +7,24 @@ typedef struct poolFreed{
 } poolFreed;
 
 typedef struct {
-	unsigned int elementSize;
-	unsigned int blockSize;
-	unsigned int used;
-	int block;
+	uint32_t elementSize;
+	uint32_t blockSize;
+	uint32_t used;
+	int32_t block;
 	poolFreed *freed;
-	unsigned int blocksUsed;
+	uint32_t blocksUsed;
 	char **blocks;
 } pool;
 
-void poolInitialize(pool *p, unsigned int elementSize, unsigned int blockSize);
+void poolInitialize(pool *p, uint32_t elementSize, uint32_t blockSize);
 void poolFreePool(pool *p);
 
+#ifndef DISABLE_MEMORY_POOLING
 void *poolMalloc(pool *p);
 void poolFree(pool *p, void *ptr);
+#else
+#include <stdlib.h>
+#define poolMalloc(p) malloc((p)->blockSize)
+#define poolFree(p, d) free(d)
+#endif
 void poolFreeAll(pool *p);

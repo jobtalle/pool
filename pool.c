@@ -7,9 +7,9 @@
 #define max(a,b) ((a)<(b)?(b):(a))
 #endif
 
-void poolInitialize(pool *p, unsigned int elementSize, unsigned int blockSize)
+void poolInitialize(pool *p, uint32_t elementSize, uint32_t blockSize)
 {
-	unsigned int i;
+	uint32_t i;
 
 	p->elementSize = max(elementSize, sizeof(poolFreed));
 	p->blockSize = blockSize;
@@ -24,7 +24,7 @@ void poolInitialize(pool *p, unsigned int elementSize, unsigned int blockSize)
 
 void poolFreePool(pool *p)
 {
-	unsigned int i;
+	uint32_t i;
 	for(i = 0; i < p->blocksUsed; ++i) {
 		if(p->blocks[i] == NULL) {
 			break;
@@ -37,6 +37,7 @@ void poolFreePool(pool *p)
 	free(p->blocks);
 }
 
+#ifndef DISABLE_MEMORY_POOLING
 void *poolMalloc(pool *p)
 {
 	if(p->freed != NULL) {
@@ -47,8 +48,8 @@ void *poolMalloc(pool *p)
 
 	if(++p->used == p->blockSize) {
 		p->used = 0;
-		if(++p->block == p->blocksUsed) {
-			unsigned int i;
+		if(++p->block == (int32_t)p->blocksUsed) {
+			uint32_t i;
 
 			p->blocksUsed <<= 1;
 			p->blocks = realloc(p->blocks, sizeof(char*)* p->blocksUsed);
@@ -72,6 +73,7 @@ void poolFree(pool *p, void *ptr)
 	p->freed = ptr;
 	p->freed->nextFree = pFreed;
 }
+#endif
 
 void poolFreeAll(pool *p)
 {
