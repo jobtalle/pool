@@ -1,5 +1,7 @@
 #pragma once
 
+#include <stdint.h>
+
 #define POOL_BLOCKS_INITIAL 1
 
 typedef struct poolFreed{
@@ -13,7 +15,7 @@ typedef struct {
 	int32_t block;
 	poolFreed *freed;
 	uint32_t blocksUsed;
-	char **blocks;
+	uint8_t **blocks;
 } pool;
 
 void poolInitialize(pool *p, uint32_t elementSize, uint32_t blockSize);
