@@ -18,7 +18,7 @@ typedef struct {
 	uint8_t **blocks;
 } pool;
 
-void poolInitialize(pool *p, uint32_t elementSize, uint32_t blockSize);
+void poolInitialize(pool *p, const uint32_t elementSize, const uint32_t blockSize);
 void poolFreePool(pool *p);
 
 #ifndef DISABLE_MEMORY_POOLING

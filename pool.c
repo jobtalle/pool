@@ -7,7 +7,7 @@
 #define max(a,b) ((a)<(b)?(b):(a))
 #endif
 
-void poolInitialize(pool *p, uint32_t elementSize, uint32_t blockSize)
+void poolInitialize(pool *p, const uint32_t elementSize, const uint32_t blockSize)
 {
 	uint32_t i;
 
@@ -70,6 +70,7 @@ void *poolMalloc(pool *p)
 void poolFree(pool *p, void *ptr)
 {
 	poolFreed *pFreed = p->freed;
+
 	p->freed = ptr;
 	p->freed->nextFree = pFreed;
 }
